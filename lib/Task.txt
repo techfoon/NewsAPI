@@ -1,0 +1,8 @@
+Task News API
+
+https://newsapi.org/
+
+API : 2f5214d3bd434cd1bfc3809db9ac6606
+
+Search functionality should be added
+GET https://newsapi.org/v2/everything?q=bitcoin&apiKey=2f5214d3bd434cd1bfc3809db9ac6606
