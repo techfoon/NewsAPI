@@ -7,7 +7,7 @@ const Settings({ Key? key }) : super(key: key);
   Widget build(BuildContext context){
     return Scaffold(
 
-      body: Text("Settings"),
+      body: Text("Settings- Ratnesh"),
     );
   }
 }
