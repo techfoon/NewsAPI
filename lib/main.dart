@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:news_api/ui/bottomNav.dart';
+import 'package:news_api/ui/ui_modules/postview.dart';
 
 void main() {
   runApp(const MainApp());
@@ -12,7 +13,8 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: BottomNav()
+  //   home: BottomNav()
+  home: Postview(),
     );
   }
 }
