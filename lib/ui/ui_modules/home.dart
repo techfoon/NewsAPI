@@ -78,6 +78,7 @@ class Home extends StatelessWidget {
     final screenHeight = MediaQuery.of(context).size.height;
 
     final screenWidth = MediaQuery.of(context).size.width;
+    Orientation orientation = MediaQuery.of(context).orientation;
 
     TextEditingController mySearchController = TextEditingController();
     return Scaffold(
@@ -114,7 +115,9 @@ class Home extends StatelessWidget {
                 height: 10,
               ),
               Container(
-                height: screenHeight * 0.08,
+                height: orientation == Orientation.portrait
+                    ? screenHeight * 0.08
+                    : screenHeight * 0.17,
 
                 child: TextField(
                   controller: mySearchController,
@@ -134,7 +137,9 @@ class Home extends StatelessWidget {
 //serach
               ),
               Container(
-                height: screenHeight * 0.05,
+                height: orientation == Orientation.portrait
+                    ? screenHeight * 0.05
+                    : screenHeight * 0.11,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -156,7 +161,9 @@ class Home extends StatelessWidget {
                 ),
               ),
               Container(
-                height: screenHeight * 0.3,
+                height: orientation == Orientation.portrait
+                    ? screenHeight * 0.3
+                    : screenHeight * 0.61,
                 child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: mPost.length,
@@ -338,7 +345,9 @@ class Home extends StatelessWidget {
                     }),
               ),
               Container(
-                height: screenHeight * 0.05,
+                height: orientation == Orientation.portrait
+                    ? screenHeight * 0.05
+                    : screenHeight * 0.11,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -360,7 +369,9 @@ class Home extends StatelessWidget {
                 ),
               ),
               Container(
-                height: screenHeight * 0.10,
+                height: orientation == Orientation.portrait
+                    ? screenHeight * 0.10
+                    : screenHeight * 0.22,
                 padding: EdgeInsets.symmetric(vertical: 15),
                 child: ListView.builder(
                     scrollDirection: Axis.horizontal,
@@ -400,8 +411,9 @@ class Home extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.only(top: 4, bottom: 4),
                             child: Container(
-                              height: screenHeight *
-                                  0.15, // height is not increasing why
+                              height:  orientation == Orientation.portrait
+                    ?  screenHeight *
+                                  0.15: screenWidth*0.31, 
                               width: screenWidth * 0.4,
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(30),
