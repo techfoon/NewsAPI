@@ -178,7 +178,7 @@ class Home extends StatelessWidget {
                           Container(
                             padding: EdgeInsets.symmetric(
                                 vertical: 25, horizontal: 25),
-                            width: 300,
+                            width: 320,
                             child: Column(
                               children: [
                                 Row(
@@ -198,13 +198,13 @@ class Home extends StatelessWidget {
                                         children: [
                                           Image.asset(
                                             "assets/icons/fire.png",
-                                            width: 20,
+                                            height: 11,
                                           ),
                                           Text(
                                             "Nature",
                                             style: TextStyle(
                                               color: Colors.white,
-                                              fontSize: 14,
+                                              fontSize: 11,
                                             ),
                                           )
                                         ],
@@ -225,7 +225,7 @@ class Home extends StatelessWidget {
                                             "Nature",
                                             style: TextStyle(
                                               color: Colors.white,
-                                              fontSize: 14,
+                                              fontSize: 11,
                                             ),
                                           ),
                                         ),
@@ -245,7 +245,7 @@ class Home extends StatelessWidget {
                                             "Animal",
                                             style: TextStyle(
                                               color: Colors.white,
-                                              fontSize: 14,
+                                              fontSize: 11,
                                             ),
                                           ),
                                         ),
@@ -254,7 +254,7 @@ class Home extends StatelessWidget {
                                   ],
                                 ),
                                 SizedBox(
-                                  height: 80,
+                                  height: 95,
                                 ),
                                 Row(
                                   mainAxisAlignment:
@@ -262,35 +262,67 @@ class Home extends StatelessWidget {
                                   children: [
                                     Row(
                                       children: [
-                                        Icon(Icons
-                                            .supervised_user_circle_outlined),
+                                        Container(
+                                          padding: EdgeInsets.all(2),
+                                          decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(11)),
+                                          child: Image.asset(
+                                            "assets/icons/cnbcNews.png",
+                                            height: 11,
+                                          ),
+                                        ),
                                         Text(
-                                          " Natalie.6h",
+                                          " Cnbc News. 1h ago",
                                           style: TextStyle(
-                                              fontSize: 10, color: Colors.grey),
+                                              fontSize: 11,
+                                              color: Colors.white),
                                         )
                                       ],
                                     ),
                                     Row(
                                       children: [
-                                        Icon(Icons.heart_broken),
+                                        Icon(
+                                          Icons.heart_broken,
+                                          color: Colors.white,
+                                          size: 11,
+                                        ),
                                         Text(
                                           "4k",
                                           style: TextStyle(
-                                              fontSize: 10, color: Colors.grey),
+                                              fontSize: 11,
+                                              color: Colors.white),
                                         ),
                                         SizedBox(
                                           width: 5,
                                         ),
-                                        Icon(Icons.message),
+                                        Icon(
+                                          Icons.message,
+                                          color: Colors.white,
+                                          size: 11,
+                                        ),
                                         Text(
                                           "3.5k",
                                           style: TextStyle(
-                                              fontSize: 10, color: Colors.grey),
+                                              fontSize: 11,
+                                              color: Colors.white),
                                         )
                                       ],
                                     ),
                                   ],
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    " Scientist Just Found The Lost Species of Jellyfish That Went Extinct 25 Million Years Ago!",
+                                    style: TextStyle(
+                                        fontSize: 11,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                 )
                               ],
                             ),
@@ -307,15 +339,55 @@ class Home extends StatelessWidget {
               ),
               Container(
                 height: screenHeight * 0.05,
-                color: Colors.green,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Trending Right Now",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      "See All",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue,
+                          fontSize: 12),
+                    )
+                  ],
+                ),
               ),
               Container(
-                height: screenHeight * 0.07,
-                color: Colors.pink,
-              ),
-              Container(
-                height: screenHeight * 0.07,
-                color: Colors.grey,
+                height: screenHeight * 0.10,
+                padding: EdgeInsets.symmetric(vertical: 15),
+                child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: mPost.length,
+                    itemBuilder: (_, index) {
+                      return SizedBox(
+                        child: Container(
+                          width: 75,
+                          height: 20, // hieght is not working why?
+                          //   padding: EdgeInsets.all(12),
+                          margin: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                              color: Color.fromARGB(136, 232, 232, 235),
+                              border: Border.all(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(5)),
+                          child: Center(
+                            child: Text(
+                              "Animal",
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 11,
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
               ),
               ListView.builder(
                 shrinkWrap: true,
