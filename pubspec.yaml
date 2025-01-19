@@ -20,7 +20,7 @@ flutter:
   assets:
     - assets/
     - assets/icons/
-    #- assets/girl/
+    - assets/img/
   #fonts:
     #- family: Exo
       #fonts:
