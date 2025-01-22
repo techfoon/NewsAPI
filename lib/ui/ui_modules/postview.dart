@@ -1,16 +1,3 @@
-/*
-
- L = 6 iches
-
- width = 2.5 *2+1
-
-MediaQuery.of(context).size.width;
-
-MediaQuery.of(context).orientation;
-MediaQuery.of(context).devicePixelRatio;
-
-*/
-
 import 'package:flutter/material.dart';
 
 class Postview extends StatefulWidget {
