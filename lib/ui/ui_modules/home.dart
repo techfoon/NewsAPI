@@ -322,7 +322,7 @@ class _HomeState extends State<Home> {
                                                   ),
                                                 ),
                                                 Text(
-                                                  " Cnbc News. 1h ago",
+                                                  " ${Snapshot.data!.articles![index].author}. 1h ago",
                                                   style: TextStyle(
                                                       fontSize: 11,
                                                       color: Colors.white),
@@ -365,7 +365,7 @@ class _HomeState extends State<Home> {
                                         ),
                                         Expanded(
                                           child: Text(
-                                            " Scientist Just Found The Lost Species of Jellyfish That Went Extinct 25 Million Years Ago!",
+                                            " ${Snapshot.data!.articles![index].title}",
                                             style: TextStyle(
                                                 fontSize: 11,
                                                 color: Colors.white,

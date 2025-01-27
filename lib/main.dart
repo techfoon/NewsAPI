@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:news_api/ui/bottomNav.dart';
 import 'package:news_api/ui/ui_modules/home.dart';
 import 'package:news_api/ui/ui_modules/postview.dart';
+import 'package:news_api/ui/ui_modules/settings.dart';
+import 'package:news_api/ui/ui_modules/signup.dart';
 
 void main() {
   runApp(const MainApp());
@@ -12,6 +14,6 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(debugShowCheckedModeBanner: false, home:BottomNav());
+    return MaterialApp(debugShowCheckedModeBanner: false, home: BottomNav());
   }
 }

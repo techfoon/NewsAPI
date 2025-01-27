@@ -6,3 +6,11 @@ API : 2f5214d3bd434cd1bfc3809db9ac6606
 
 Search functionality should be added
 GET https://newsapi.org/v2/everything?q=bitcoin&apiKey=2f5214d3bd434cd1bfc3809db9ac6606
+
+
+News APP UI
+
+https://ui8.net/potara-studio-cad0c3/products/tidings---news-app-ui-kit
+
+
+http://www.techfoon.com/user_api.php?apikey=peeyush123&email=jane@example.com
