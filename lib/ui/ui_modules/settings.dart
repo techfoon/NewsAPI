@@ -48,7 +48,9 @@ class _SettingsState extends State<Settings> {
                     borderRadius: BorderRadius.circular(15),
                     child: Image.asset(
                       "assets/icons/download.jpg",
-                      height: screenHeight * 0.25,
+                      height: orientation == Orientation.portrait
+                          ? screenHeight * 0.25
+                          : screenWidth * 0.40,
                       width: screenWidth,
                       fit: BoxFit.cover,
                     ),

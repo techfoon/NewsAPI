@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:news_api/api/api_hitter.dart';
 import 'package:http/http.dart' as http;
 import 'package:news_api/models/Newsmodel.dart';
+import 'package:news_api/ui/ui_modules/exploar.dart';
+import 'package:news_api/ui/ui_modules/postview.dart';
+import 'package:news_api/ui/ui_modules/settings.dart';
 
 class Home extends StatefulWidget {
   @override
   State<Home> createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   List<Map<String, dynamic>> mPost = [
     {
       "source": {"id": "wired", "name": "Wired"},
@@ -86,6 +89,14 @@ class _HomeState extends State<Home> {
 
   var apiData;
 
+  var tabapiData = ApiHitter().ApiGeter(
+      jsonUrl:
+          "https://newsapi.org/v2/everything?q=home&apiKey=2f5214d3bd434cd1bfc3809db9ac6606");
+  late TabController customTabController;
+  double? screenHeight;
+  double? screenWidth;
+  Orientation? orientation;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -94,14 +105,67 @@ class _HomeState extends State<Home> {
     apiData = hitter.ApiGeter(
         jsonUrl:
             "https://newsapi.org/v2/everything?q=bitcoin&apiKey=2f5214d3bd434cd1bfc3809db9ac6606");
+
+    tabapiData = hitter.ApiGeter(
+        jsonUrl:
+            "https://newsapi.org/v2/everything?q=home&apiKey=2f5214d3bd434cd1bfc3809db9ac6606");
+
+    customTabController = TabController(length: 4, vsync: this);
+
+    // Add a listener that triggers on both tab click and swipe
+    customTabController.addListener(() {
+      if (customTabController.index == customTabController.previousIndex)
+        return; // Prevent duplicate calls
+      print("Selected Tab Index: ${customTabController.index}");
+
+      // Perform action when a specific tab is selected
+      if (customTabController.index == 0) {
+        tabapiData = hitter.ApiGeter(
+            jsonUrl:
+                "https://newsapi.org/v2/everything?q=All&apiKey=2f5214d3bd434cd1bfc3809db9ac6606");
+        print("#0");
+
+        setState(() {});
+      }
+      if (customTabController.index == 1) {
+        tabapiData = hitter.ApiGeter(
+            jsonUrl:
+                "https://newsapi.org/v2/everything?q=Politics&apiKey=2f5214d3bd434cd1bfc3809db9ac6606");
+
+        print("#!");
+        setState(() {});
+      }
+
+      if (customTabController.index == 2) {
+        tabapiData = hitter.ApiGeter(
+            jsonUrl:
+                "https://newsapi.org/v2/everything?q=Nature&apiKey=2f5214d3bd434cd1bfc3809db9ac6606");
+
+        print("#2");
+        setState(() {});
+      }
+
+      if (customTabController.index == 3) {
+        tabapiData = hitter.ApiGeter(
+            jsonUrl:
+                "https://newsapi.org/v2/everything?q=Education&apiKey=2f5214d3bd434cd1bfc3809db9ac6606");
+        print("#3");
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    customTabController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
+    screenHeight = MediaQuery.of(context).size.height;
 
-    final screenWidth = MediaQuery.of(context).size.width;
-    Orientation orientation = MediaQuery.of(context).orientation;
+    screenWidth = MediaQuery.of(context).size.width;
+    orientation = MediaQuery.of(context).orientation;
 
     TextEditingController mySearchController = TextEditingController();
     return Scaffold(
@@ -139,8 +203,8 @@ class _HomeState extends State<Home> {
               ),
               Container(
                 height: orientation == Orientation.portrait
-                    ? screenHeight * 0.08
-                    : screenHeight * 0.17,
+                    ? screenHeight! * 0.08
+                    : screenHeight! * 0.17,
 
                 child: TextField(
                   controller: mySearchController,
@@ -157,12 +221,12 @@ class _HomeState extends State<Home> {
                   ),
                 ),
 
-//serach
+                //serach
               ),
               Container(
                 height: orientation == Orientation.portrait
-                    ? screenHeight * 0.05
-                    : screenHeight * 0.11,
+                    ? screenHeight! * 0.05
+                    : screenHeight! * 0.11,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -185,8 +249,8 @@ class _HomeState extends State<Home> {
               ),
               Container(
                 height: orientation == Orientation.portrait
-                    ? screenHeight * 0.3
-                    : screenHeight * 0.61,
+                    ? screenHeight! * 0.3
+                    : screenHeight! * 0.61,
                 child: FutureBuilder(
                     future: hitter.ApiGeter(
                         jsonUrl:
@@ -393,8 +457,8 @@ class _HomeState extends State<Home> {
               ),
               Container(
                 height: orientation == Orientation.portrait
-                    ? screenHeight * 0.05
-                    : screenHeight * 0.11,
+                    ? screenHeight! * 0.05
+                    : screenHeight! * 0.11,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -417,10 +481,40 @@ class _HomeState extends State<Home> {
               ),
               Container(
                 height: orientation == Orientation.portrait
-                    ? screenHeight * 0.10
-                    : screenHeight * 0.22,
+                    ? screenHeight! * 0.10
+                    : screenHeight! * 0.22,
                 padding: EdgeInsets.symmetric(vertical: 15),
-                child: ListView.builder(
+                child: SingleChildScrollView(
+                  child: TabBar(
+                      onTap: (context) {
+                        setState(() {});
+                      },
+                      controller: customTabController,
+                      isScrollable: true,
+                      indicator: BoxDecoration(
+                        color: Color.fromARGB(136, 232, 232, 235),
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+
+                      //   isScrollable: true,
+                      indicatorColor: Colors.pink,
+                      tabs: [
+                        Tab(
+                          child: Text("All"),
+                        ),
+                        Tab(
+                          child: Text("Politics"),
+                        ),
+                        Tab(
+                          child: Text("Nature"),
+                        ),
+                        Tab(
+                          child: Text("Education"),
+                        ),
+                      ]),
+                ),
+                /* child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: mPost.length,
                     itemBuilder: (_, index) {
@@ -445,96 +539,44 @@ class _HomeState extends State<Home> {
                           ),
                         ),
                       );
-                    }),
+                    }),*/
               ),
+              /*      Container(
+                height: 30,
+                width: 40,
+                child: TabBarView(children: [
+                  Text("TAb!"),
+                  Text("TAB2"),
+                  Text("TAB3"),
+                  Text("TAB4")
+                ]),
+              ),
+    
+              */
               ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 itemBuilder: (_, index) {
-                  return Row(
-                    children: [
-                      Expanded(
-                          flex: 2,
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 4, bottom: 4),
-                            child: Container(
-                              height: orientation == Orientation.portrait
-                                  ? screenHeight * 0.15
-                                  : screenWidth * 0.31,
-                              width: screenWidth * 0.4,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(30),
-                                child: Image.network(
-                                  mPost[index]["urlToImage"],
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                          )),
-                      Expanded(
-                        flex: 4,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "${mPost[index]["title"].split(' ').take(3).join(' ')}",
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                ),
-                              ),
-                              SizedBox(height: 5),
-                              Text(
-                                "${mPost[index]["description"].split(' ').take(8).join(' ')}",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 14,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Icon(Icons
-                                          .supervised_user_circle_outlined),
-                                      Text(
-                                        " Natalie.6h",
-                                        style: TextStyle(
-                                            fontSize: 10, color: Colors.grey),
-                                      )
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Icon(Icons.heart_broken),
-                                      Text(
-                                        "4k",
-                                        style: TextStyle(
-                                            fontSize: 10, color: Colors.grey),
-                                      ),
-                                      SizedBox(
-                                        width: 5,
-                                      ),
-                                      Icon(Icons.message),
-                                      Text(
-                                        "3.5k",
-                                        style: TextStyle(
-                                            fontSize: 10, color: Colors.grey),
-                                      )
-                                    ],
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
+                  return SizedBox(
+                    height: orientation == Orientation.portrait
+                        ? screenHeight! * 0.15
+                        : screenWidth! * 0.31,
+                    width: screenWidth! * 0.4,
+                    child:
+                        TabBarView(controller: customTabController, children: [
+                      tabCaller(
+                        index: index,
+                      ),
+                      tabCaller(
+                        index: index,
+                      ),
+                      tabCaller(
+                        index: index,
+                      ),
+                      tabCaller(
+                        index: index,
+                      ),
+                    ]),
                   );
                 },
                 itemCount: mPost.length,
@@ -544,5 +586,110 @@ class _HomeState extends State<Home> {
         ),
       ),
     );
+  }
+
+  Widget tabCaller({required int index}) {
+    return FutureBuilder(
+        future: tabapiData,
+        builder: (context, Snapshot) {
+          if (Snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (Snapshot.hasError) {
+            return Center(
+              child: Text("Error  ${Snapshot.error.toString()}"),
+            );
+          } else if (Snapshot.hasData) {
+            return Row(
+              children: [
+                Expanded(
+                    flex: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 4, bottom: 4),
+                      child: Container(
+                        height: orientation == Orientation.portrait
+                            ? screenHeight! * 0.15
+                            : screenWidth! * 0.31,
+                        width: screenWidth! * 0.4,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(30),
+                          child: Image.network(
+                            Snapshot.data!.articles![index].urlToImage ??
+                                "https://gizmodo.com/app/uploads/2025/01/mike-johns-waymo.jpg",
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    )),
+                Expanded(
+                  flex: 4,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "${Snapshot.data!.articles![index].title!.split(' ').take(3).join(' ')}",
+                          style: TextStyle(
+                            color: Colors.grey,
+                          ),
+                        ),
+                        SizedBox(height: 5),
+                        Text(
+                          "${mPost[index]["description"].split(' ').take(8).join(' ')}",
+                          style: TextStyle(
+                            color: Colors.black,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 14,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(Icons.supervised_user_circle_outlined),
+                                Text(
+                                  " Natalie.6h",
+                                  style: TextStyle(
+                                      fontSize: 10, color: Colors.grey),
+                                )
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Icon(Icons.heart_broken),
+                                Text(
+                                  "4k",
+                                  style: TextStyle(
+                                      fontSize: 10, color: Colors.grey),
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Icon(Icons.message),
+                                Text(
+                                  "3.5k",
+                                  style: TextStyle(
+                                      fontSize: 10, color: Colors.grey),
+                                )
+                              ],
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            );
+          } else {
+            return Container(
+              child: Text("failed"),
+            );
+          }
+        });
   }
 }
