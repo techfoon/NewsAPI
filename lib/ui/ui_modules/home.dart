@@ -637,7 +637,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                         ),
                         SizedBox(height: 5),
                         Text(
-                          "${mPost[index]["description"].split(' ').take(8).join(' ')}",
+                          "${Snapshot.data!.articles![index].description!.split(' ').take(7).join(' ')}",
                           style: TextStyle(
                             color: Colors.black,
                           ),

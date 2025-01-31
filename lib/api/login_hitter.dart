@@ -5,7 +5,7 @@ import 'package:news_api/models/Usermodel.dart';
 
 import 'package:http/http.dart' as http;
 
-class ApiHitter {
+class LoginApiHitter {
   var apiData;
   Future<LoginModel> ApiGeter({required String jsonUrl}) async {
     var Parsed_url = Uri.parse(jsonUrl);
@@ -24,7 +24,7 @@ class ApiHitter {
     } else {
       log("Api Failed");
 
-      return apiData!;
+      return apiData;
     }
   }
 }

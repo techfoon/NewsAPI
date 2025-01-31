@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:news_api/api/login_hitter.dart';
 
-class Signup extends StatelessWidget {
+class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TextEditingController EmailController = TextEditingController();
+    TextEditingController PassController = TextEditingController();
     final screenHeight = MediaQuery.of(context).size.height;
 
     final screenWidth = MediaQuery.of(context).size.width;
@@ -83,7 +85,7 @@ class Signup extends StatelessWidget {
               ),
               Container(
                 child: TextField(
-                  controller: EmailController,
+                  controller: PassController,
                   decoration: InputDecoration(
                     hintText: "Your Acitve Password",
                     hintStyle: TextStyle(color: Colors.grey),
@@ -112,7 +114,13 @@ class Signup extends StatelessWidget {
                   child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue),
-                      onPressed: () {},
+                      onPressed: () {
+                        var Url =
+                            "http://www.techfoon.com/api.php?apikey=peeyush123&email=${EmailController.text}";
+                        var apiUrl = LoginApiHitter().ApiGeter(jsonUrl: Url);
+
+                        print(apiUrl);
+                      },
                       child: Text(
                         "Submit",
                         style: TextStyle(
