@@ -1,7 +1,25 @@
+import 'dart:math';
+import 'dart:convert';
+import 'dart:developer';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:news_api/api/login_hitter.dart';
+import 'package:news_api/models/Usermodel.dart';
+import 'package:news_api/ui/bottomNav.dart';
 
-class Login extends StatelessWidget {
+class Login extends StatefulWidget {
+  @override
+  State<Login> createState() => _LoginState();
+}
+
+logintodash({required BuildContext context}) {
+  return Navigator.pushReplacement(
+    context,
+    MaterialPageRoute(builder: (context) => BottomNav()),
+  );
+}
+
+class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     TextEditingController EmailController = TextEditingController();
@@ -115,11 +133,10 @@ class Login extends StatelessWidget {
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue),
                       onPressed: () {
-                        var Url =
-                            "http://www.techfoon.com/api.php?apikey=peeyush123&email=${EmailController.text}";
-                        var apiUrl = LoginApiHitter().ApiGeter(jsonUrl: Url);
-
-                        print(apiUrl);
+                        loginverify(
+                            EmailController: EmailController.text,
+                            PassController: PassController.text,
+                            Context: context);
                       },
                       child: Text(
                         "Submit",
@@ -226,5 +243,51 @@ class Login extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void loginverify(
+      {required String EmailController,
+      required String PassController,
+      required BuildContext Context}) async {
+    int? verifiers;
+    var apiData;
+    var jsonUrl =
+        "http://www.techfoon.com/api.php?apikey=peeyush123&email=${EmailController}";
+
+    var Parsed_url = Uri.parse(jsonUrl);
+    var response = await http.get(Parsed_url);
+
+    if (response.statusCode == 200) {
+      print(response.body);
+
+      var resData = jsonDecode(response.body);
+
+      if (resData['data'] == null) {
+        print("incorrect details please signup");
+
+        ScaffoldMessenger.of(Context)
+            .showSnackBar(SnackBar(content: Text(" User Not Found")));
+      } else {
+        apiData = LoginModel.fromJson(resData);
+
+  
+
+        if (resData['data']['Pass'] == PassController) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => BottomNav()),
+          );
+        } else {
+          ScaffoldMessenger.of(Context)
+              .showSnackBar(SnackBar(content: Text("Iconrrect Pass")));
+        }
+        return apiData!;
+      }
+    } else {
+      print("Api Failed");
+
+      return apiData;
+    }
+
   }
 }
