@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+import 'package:news_api/models/Usermodel.dart';
+import 'package:news_api/ui/bottomNav.dart';
 
 class Signup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TextEditingController EmailController = TextEditingController();
+    TextEditingController PassController = TextEditingController();
+    TextEditingController cPassController = TextEditingController();
     final screenHeight = MediaQuery.of(context).size.height;
 
     final screenWidth = MediaQuery.of(context).size.width;
@@ -23,7 +30,7 @@ class Signup extends StatelessWidget {
               ),
               Container(
                 child: Text.rich(TextSpan(
-                    text: "Login To Yours ",
+                    text: "Singup To Yours ",
                     style: TextStyle(fontSize: 33, fontWeight: FontWeight.bold),
                     children: [
                       TextSpan(
@@ -83,7 +90,7 @@ class Signup extends StatelessWidget {
               ),
               Container(
                 child: TextField(
-                  controller: EmailController,
+                  controller: PassController,
                   decoration: InputDecoration(
                     hintText: "Your Acitve Password",
                     hintStyle: TextStyle(color: Colors.grey),
@@ -113,7 +120,7 @@ class Signup extends StatelessWidget {
               ),
               Container(
                 child: TextField(
-                  controller: EmailController,
+                  controller: cPassController,
                   decoration: InputDecoration(
                     hintText: "Confirm Your Password",
                     hintStyle: TextStyle(color: Colors.grey),
@@ -142,7 +149,13 @@ class Signup extends StatelessWidget {
                   child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue),
-                      onPressed: () {},
+                      onPressed: () {
+                        SignupVerify(
+                            EmailController: EmailController.text,
+                            PassController: PassController.text,
+                            cPassController: cPassController.text,
+                            Context: context);
+                      },
                       child: Text(
                         "Submit",
                         style: TextStyle(
@@ -250,7 +263,51 @@ class Signup extends StatelessWidget {
     );
   }
 
+  void SignupVerify(
+      {required String EmailController,
+      required String PassController, required String cPassController,
+      required BuildContext Context}) async {
+    int? verifiers;
+    var apiData;
+    var jsonUrl =
+        "http://www.techfoon.com/api.php?apikey=peeyush123&email=${EmailController}";
 
+    var Parsed_url = Uri.parse(jsonUrl);
+    var response = await http.get(Parsed_url);
 
-  
+    if (response.statusCode == 200) {
+      print(response.body);
+
+      var resData = jsonDecode(response.body); // to fetch data
+
+      if (resData['data'] == null) {
+        final response = await http.post(
+            Uri.parse("http://www.techfoon.com/api.php?apikey=peeyush123"),
+            headers: {"Content-Type": "application/json"},
+            body: jsonEncode({
+              "Name": "Ratnesh Lunt",
+              "email": EmailController,
+              "Pass": PassController,
+              "cpass": cPassController
+            }));
+
+        if (response.statusCode == 200) {
+      ScaffoldMessenger.of(Context)
+            .showSnackBar(SnackBar(content: Text("New user created")));
+            print("Response Body: ${response.body}");
+        } else {
+       ScaffoldMessenger.of(Context)
+            .showSnackBar(SnackBar(content: Text("Failed to insert : ${response.body}")));
+        
+        }
+
+       
+      } else {
+        ScaffoldMessenger.of(Context).showSnackBar(
+            SnackBar(content: Text("This email is already exist")));
+      }
+    } else {
+      print("Api Failed");
+    }
+  }
 }
