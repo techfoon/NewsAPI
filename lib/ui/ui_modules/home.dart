@@ -152,6 +152,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         print("#3");
       }
     });
+
+    /*----------------------searching*/
+
+    /*   filteredItems = allItems;
+    mySearchController.addListener(_search);*/
   }
 
   @override
@@ -160,6 +165,37 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     super.dispose();
   }
 
+  TextEditingController mySearchController = TextEditingController();
+  /*
+ List<String> allItems = [
+    "Apple",
+      "Appliae",
+    "Banana",
+    "Orange",
+    "Grapes",
+    "Mango",
+    "Pineapple",
+    "Watermelon"
+  ];
+  List<String> filteredItems = [];
+  
+  
+
+
+
+
+
+  
+  void _search() {
+    String query = mySearchController.text.toLowerCase();
+    setState(() {
+      filteredItems = allItems
+          .where((item) => item.toLowerCase().contains(query))
+          .toList();
+    });
+  }
+
+  */
   @override
   Widget build(BuildContext context) {
     screenHeight = MediaQuery.of(context).size.height;
@@ -167,7 +203,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     screenWidth = MediaQuery.of(context).size.width;
     orientation = MediaQuery.of(context).orientation;
 
-    TextEditingController mySearchController = TextEditingController();
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -196,393 +231,438 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       body: Padding(
         padding: EdgeInsets.only(left: 10, right: 10),
         child: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                height: orientation == Orientation.portrait
-                    ? screenHeight! * 0.08
-                    : screenHeight! * 0.17,
+          child: Column(children: [
+            SizedBox(
+              height: 10,
+            ),
+            Container(
+              height: orientation == Orientation.portrait
+                  ? screenHeight! * 0.08
+                  : screenHeight! * 0.17,
 
-                child: TextField(
-                  controller: mySearchController,
-                  decoration: InputDecoration(
-                    hintText: "Let's see what happen Today",
-                    hintStyle: TextStyle(color: Colors.grey),
-                    prefixIcon: Icon(Icons.search),
-                    prefixIconColor: Colors.grey,
-                    filled: true,
-                    fillColor: const Color.fromARGB(248, 232, 232, 235),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
-                        borderSide: BorderSide.none),
-                  ),
+              child: TextField(
+                onChanged: (value) {
+                  setState(() {});
+                },
+                controller: mySearchController,
+                decoration: InputDecoration(
+                  hintText: "Let's see what happen Today",
+                  hintStyle: TextStyle(color: Colors.grey),
+                  prefixIcon: Icon(Icons.search),
+                  prefixIconColor: Colors.grey,
+                  filled: true,
+                  fillColor: const Color.fromARGB(248, 232, 232, 235),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide.none),
                 ),
-
-                //serach
               ),
-              Container(
-                height: orientation == Orientation.portrait
-                    ? screenHeight! * 0.05
-                    : screenHeight! * 0.11,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Breaking News !",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+
+              //serach
+            ),
+            mySearchController.text.isNotEmpty
+                ? onSearch(SearchingData: mySearchController.text)
+                : Column(
+                    children: [
+                      /*------------------------------------------------------------------*/
+
+                      Container(
+                        height: orientation == Orientation.portrait
+                            ? screenHeight! * 0.05
+                            : screenHeight! * 0.11,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Breaking News !",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              "See All",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.blue,
+                                  fontSize: 12),
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                    Text(
-                      "See All",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue,
-                          fontSize: 12),
-                    )
-                  ],
-                ),
-              ),
-              Container(
-                height: orientation == Orientation.portrait
-                    ? screenHeight! * 0.3
-                    : screenHeight! * 0.61,
-                child: FutureBuilder(
-                    future: hitter.ApiGeter(
-                        jsonUrl:
-                            "https://newsapi.org/v2/everything?q=bitcoin&apiKey=2f5214d3bd434cd1bfc3809db9ac6606"),
-                    builder: (context, Snapshot) {
-                      if (Snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      } else if (Snapshot.hasError) {
-                        return Center(
-                          child: Text("Error  ${Snapshot.error.toString()}"),
-                        );
-                      } else if (Snapshot.hasData) {
-                        return ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: 8,
-                            itemBuilder: (_, index) {
-                              return Stack(
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.all(10),
-                                    height: 200,
-                                    width: 300,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(15),
-                                      child: Image.network(
-                                        Snapshot
-                                            .data!.articles![index].urlToImage!,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                                  Container(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 25, horizontal: 25),
-                                    width: 320,
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Container(
-                                              padding: EdgeInsets.all(5),
-                                              decoration: BoxDecoration(
-                                                  color: Color.fromARGB(
-                                                      136, 232, 232, 235),
-                                                  border: Border.all(
-                                                      color: Colors.white),
-                                                  borderRadius:
-                                                      BorderRadius.circular(5)),
-                                              child: Row(
-                                                children: [
-                                                  Image.asset(
-                                                    "assets/icons/fire.png",
-                                                    height: 11,
-                                                  ),
-                                                  Text(
-                                                    "Nature",
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 11,
-                                                    ),
-                                                  )
-                                                ],
+                      Container(
+                        height: orientation == Orientation.portrait
+                            ? screenHeight! * 0.3
+                            : screenHeight! * 0.61,
+                        child: FutureBuilder(
+                            future: hitter.ApiGeter(
+                                jsonUrl:
+                                    "https://newsapi.org/v2/everything?q=bitcoin&apiKey=2f5214d3bd434cd1bfc3809db9ac6606"),
+                            builder: (context, Snapshot) {
+                              if (Snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              } else if (Snapshot.hasError) {
+                                return Center(
+                                  child: Text(
+                                      "Error  ${Snapshot.error.toString()}"),
+                                );
+                              } else if (Snapshot.hasData) {
+                                return ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: 8,
+                                    itemBuilder: (_, index) {
+                                      return Stack(
+                                        children: [
+                                          Container(
+                                            margin: EdgeInsets.all(10),
+                                            height: 200,
+                                            width: 300,
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(15),
+                                              child: Image.network(
+                                                Snapshot.data!.articles![index]
+                                                    .urlToImage!,
+                                                fit: BoxFit.cover,
                                               ),
                                             ),
-                                            Row(
-                                              children: [
-                                                Container(
-                                                  padding: EdgeInsets.all(5),
-                                                  decoration: BoxDecoration(
-                                                      color: Color.fromARGB(
-                                                          136, 232, 232, 235),
-                                                      border: Border.all(
-                                                          color: Colors.white),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              5)),
-                                                  child: Text(
-                                                    "Nature",
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 11,
-                                                    ),
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  width: 10,
-                                                ),
-                                                Container(
-                                                  padding: EdgeInsets.all(5),
-                                                  decoration: BoxDecoration(
-                                                      color: Color.fromARGB(
-                                                          136, 232, 232, 235),
-                                                      border: Border.all(
-                                                          color: Colors.white),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              5)),
-                                                  child: Text(
-                                                    "Animal",
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 11,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 95,
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Container(
-                                                  padding: EdgeInsets.all(2),
-                                                  decoration: BoxDecoration(
-                                                      color: Colors.white,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              11)),
-                                                  child: Image.asset(
-                                                    "assets/icons/cnbcNews.png",
-                                                    height: 11,
-                                                  ),
-                                                ),
-                                                Text(
-                                                  " ${Snapshot.data!.articles![index].author}. 1h ago",
-                                                  style: TextStyle(
-                                                      fontSize: 11,
-                                                      color: Colors.white),
-                                                )
-                                              ],
-                                            ),
-                                            Row(
-                                              children: [
-                                                Icon(
-                                                  Icons.heart_broken,
-                                                  color: Colors.white,
-                                                  size: 11,
-                                                ),
-                                                Text(
-                                                  "4k",
-                                                  style: TextStyle(
-                                                      fontSize: 11,
-                                                      color: Colors.white),
-                                                ),
-                                                SizedBox(
-                                                  width: 5,
-                                                ),
-                                                Icon(
-                                                  Icons.message,
-                                                  color: Colors.white,
-                                                  size: 11,
-                                                ),
-                                                Text(
-                                                  "3.5k",
-                                                  style: TextStyle(
-                                                      fontSize: 11,
-                                                      color: Colors.white),
-                                                )
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 5,
-                                        ),
-                                        Expanded(
-                                          child: Text(
-                                            " ${Snapshot.data!.articles![index].title}",
-                                            style: TextStyle(
-                                                fontSize: 11,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
                                           ),
-                                        )
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              );
-                              /*    return Container(
-                        margin: EdgeInsets.all(10),
-                        color: Colors.red,
-                        height: 200,
-                        width: 300,
-                      );*/
-                            });
-                      } else {
-                        return Center(
-                          child: Text("404"),
-                        );
-                      }
-                    }),
-              ),
-              Container(
-                height: orientation == Orientation.portrait
-                    ? screenHeight! * 0.05
-                    : screenHeight! * 0.11,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Trending Right Now",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                                          Container(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 25, horizontal: 25),
+                                            width: 320,
+                                            child: Column(
+                                              children: [
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Container(
+                                                      padding:
+                                                          EdgeInsets.all(5),
+                                                      decoration: BoxDecoration(
+                                                          color: Color.fromARGB(
+                                                              136,
+                                                              232,
+                                                              232,
+                                                              235),
+                                                          border: Border.all(
+                                                              color:
+                                                                  Colors.white),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(5)),
+                                                      child: Row(
+                                                        children: [
+                                                          Image.asset(
+                                                            "assets/icons/fire.png",
+                                                            height: 11,
+                                                          ),
+                                                          Text(
+                                                            "Nature",
+                                                            style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 11,
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    Row(
+                                                      children: [
+                                                        Container(
+                                                          padding:
+                                                              EdgeInsets.all(5),
+                                                          decoration: BoxDecoration(
+                                                              color: Color
+                                                                  .fromARGB(
+                                                                      136,
+                                                                      232,
+                                                                      232,
+                                                                      235),
+                                                              border: Border.all(
+                                                                  color: Colors
+                                                                      .white),
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          5)),
+                                                          child: Text(
+                                                            "Nature",
+                                                            style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 11,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          width: 10,
+                                                        ),
+                                                        Container(
+                                                          padding:
+                                                              EdgeInsets.all(5),
+                                                          decoration: BoxDecoration(
+                                                              color: Color
+                                                                  .fromARGB(
+                                                                      136,
+                                                                      232,
+                                                                      232,
+                                                                      235),
+                                                              border: Border.all(
+                                                                  color: Colors
+                                                                      .white),
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          5)),
+                                                          child: Text(
+                                                            "Animal",
+                                                            style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 11,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                                SizedBox(
+                                                  height: 95,
+                                                ),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        Container(
+                                                          padding:
+                                                              EdgeInsets.all(2),
+                                                          decoration: BoxDecoration(
+                                                              color:
+                                                                  Colors.white,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          11)),
+                                                          child: Image.asset(
+                                                            "assets/icons/cnbcNews.png",
+                                                            height: 11,
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          " ${Snapshot.data!.articles![index].author}. 1h ago",
+                                                          style: TextStyle(
+                                                              fontSize: 11,
+                                                              color:
+                                                                  Colors.white),
+                                                        )
+                                                      ],
+                                                    ),
+                                                    Row(
+                                                      children: [
+                                                        Icon(
+                                                          Icons.heart_broken,
+                                                          color: Colors.white,
+                                                          size: 11,
+                                                        ),
+                                                        Text(
+                                                          "4k",
+                                                          style: TextStyle(
+                                                              fontSize: 11,
+                                                              color:
+                                                                  Colors.white),
+                                                        ),
+                                                        SizedBox(
+                                                          width: 5,
+                                                        ),
+                                                        Icon(
+                                                          Icons.message,
+                                                          color: Colors.white,
+                                                          size: 11,
+                                                        ),
+                                                        Text(
+                                                          "3.5k",
+                                                          style: TextStyle(
+                                                              fontSize: 11,
+                                                              color:
+                                                                  Colors.white),
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                                SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Expanded(
+                                                  child: Text(
+                                                    " ${Snapshot.data!.articles![index].title}",
+                                                    style: TextStyle(
+                                                        fontSize: 11,
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          )
+                                        ],
+                                      );
+                                      /*    return Container(
+                          margin: EdgeInsets.all(10),
+                          color: Colors.red,
+                          height: 200,
+                          width: 300,
+                        );*/
+                                    });
+                              } else {
+                                return Center(
+                                  child: Text("404"),
+                                );
+                              }
+                            }),
                       ),
-                    ),
-                    Text(
-                      "See All",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue,
-                          fontSize: 12),
-                    )
-                  ],
-                ),
-              ),
-              Container(
-                height: orientation == Orientation.portrait
-                    ? screenHeight! * 0.10
-                    : screenHeight! * 0.22,
-                padding: EdgeInsets.symmetric(vertical: 15),
-                child: SingleChildScrollView(
-                  child: TabBar(
-                      onTap: (context) {
-                        setState(() {});
-                      },
-                      controller: customTabController,
-                      isScrollable: true,
-                      indicator: BoxDecoration(
-                        color: Color.fromARGB(136, 232, 232, 235),
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-
-                      //   isScrollable: true,
-                      indicatorColor: Colors.pink,
-                      tabs: [
-                        Tab(
-                          child: Text("All"),
-                        ),
-                        Tab(
-                          child: Text("Politics"),
-                        ),
-                        Tab(
-                          child: Text("Nature"),
-                        ),
-                        Tab(
-                          child: Text("Education"),
-                        ),
-                      ]),
-                ),
-                /* child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: mPost.length,
-                    itemBuilder: (_, index) {
-                      return SizedBox(
-                        child: Container(
-                          width: 75,
-                          height: 20, // hieght is not working why?
-                          //   padding: EdgeInsets.all(12),
-                          margin: EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                              color: Color.fromARGB(136, 232, 232, 235),
-                              border: Border.all(color: Colors.grey),
-                              borderRadius: BorderRadius.circular(5)),
-                          child: Center(
-                            child: Text(
-                              "Animal",
+                      Container(
+                        height: orientation == Orientation.portrait
+                            ? screenHeight! * 0.05
+                            : screenHeight! * 0.11,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Trending Right Now",
                               style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 11,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              "See All",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.blue,
+                                  fontSize: 12),
+                            )
+                          ],
+                        ),
+                      ),
+                      Container(
+                        height: orientation == Orientation.portrait
+                            ? screenHeight! * 0.10
+                            : screenHeight! * 0.22,
+                        padding: EdgeInsets.symmetric(vertical: 15),
+                        child: SingleChildScrollView(
+                          child: TabBar(
+                              onTap: (context) {
+                                setState(() {});
+                              },
+                              controller: customTabController,
+                              isScrollable: true,
+                              indicator: BoxDecoration(
+                                color: Color.fromARGB(136, 232, 232, 235),
+                                border: Border.all(color: Colors.grey),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+
+                              //   isScrollable: true,
+                              indicatorColor: Colors.pink,
+                              tabs: [
+                                Tab(
+                                  child: Text("All"),
+                                ),
+                                Tab(
+                                  child: Text("Politics"),
+                                ),
+                                Tab(
+                                  child: Text("Nature"),
+                                ),
+                                Tab(
+                                  child: Text("Education"),
+                                ),
+                              ]),
+                        ),
+                        /* child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: mPost.length,
+                      itemBuilder: (_, index) {
+                        return SizedBox(
+                          child: Container(
+                            width: 75,
+                            height: 20, // hieght is not working why?
+                            //   padding: EdgeInsets.all(12),
+                            margin: EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                                color: Color.fromARGB(136, 232, 232, 235),
+                                border: Border.all(color: Colors.grey),
+                                borderRadius: BorderRadius.circular(5)),
+                            child: Center(
+                              child: Text(
+                                "Animal",
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 11,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      );
-                    }),*/
-              ),
-              /*      Container(
-                height: 30,
-                width: 40,
-                child: TabBarView(children: [
-                  Text("TAb!"),
-                  Text("TAB2"),
-                  Text("TAB3"),
-                  Text("TAB4")
-                ]),
-              ),
-    
-              */
-              ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemBuilder: (_, index) {
-                  return SizedBox(
-                    height: orientation == Orientation.portrait
-                        ? screenHeight! * 0.15
-                        : screenWidth! * 0.31,
-                    width: screenWidth! * 0.4,
-                    child:
-                        TabBarView(controller: customTabController, children: [
-                      tabCaller(
-                        index: index,
+                        );
+                      }),*/
                       ),
-                      tabCaller(
-                        index: index,
-                      ),
-                      tabCaller(
-                        index: index,
-                      ),
-                      tabCaller(
-                        index: index,
-                      ),
-                    ]),
-                  );
-                },
-                itemCount: mPost.length,
-              )
-            ],
-          ),
+                      /*      Container(
+                  height: 30,
+                  width: 40,
+                  child: TabBarView(children: [
+                    Text("TAb!"),
+                    Text("TAB2"),
+                    Text("TAB3"),
+                    Text("TAB4")
+                  ]),
+                ),
+                
+                */
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemBuilder: (_, index) {
+                          return SizedBox(
+                            height: orientation == Orientation.portrait
+                                ? screenHeight! * 0.15
+                                : screenWidth! * 0.31,
+                            width: screenWidth! * 0.4,
+                            child: TabBarView(
+                                controller: customTabController,
+                                children: [
+                                  tabCaller(
+                                    index: index,
+                                  ),
+                                  tabCaller(
+                                    index: index,
+                                  ),
+                                  tabCaller(
+                                    index: index,
+                                  ),
+                                  tabCaller(
+                                    index: index,
+                                  ),
+                                ]),
+                          );
+                        },
+                        itemCount: mPost.length,
+                      )
+                    ],
+                  ),
+          ]),
         ),
       ),
     );
@@ -691,5 +771,129 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             );
           }
         });
+  }
+
+  onSearch({required String SearchingData}) {
+    return Container(
+      height: screenHeight,
+      width: screenWidth,
+      child: ListView.builder(
+        itemBuilder: (_, index) {
+          return SizedBox(
+              child: FutureBuilder(
+                  future: ApiHitter().ApiGeter(
+                      jsonUrl:
+                          "https://newsapi.org/v2/everything?q=${SearchingData}&apiKey=2f5214d3bd434cd1bfc3809db9ac6606"),
+                  builder: (context, Snapshot) {
+                    if (Snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (Snapshot.hasError) {
+                      return Center(
+                        child: Text("Error  ${Snapshot.error.toString()}"),
+                      );
+                    } else if (Snapshot.hasData) {
+                      return Row(
+                        children: [
+                          Expanded(
+                              flex: 2,
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 4, bottom: 4),
+                                child: Container(
+                                  height: orientation == Orientation.portrait
+                                      ? screenHeight! * 0.15
+                                      : screenWidth! * 0.31,
+                                  width: screenWidth! * 0.4,
+                                  child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(30),
+                                      child: Image.network(
+                                            Snapshot.data!.articles![index]
+                                                    .urlToImage ??
+                                                "https://gizmodo.com/app/uploads/2025/01/mike-johns-waymo.jpg",
+                                            fit: BoxFit.cover,
+                                          ) ??
+                                          FlutterLogo()),
+                                ),
+                              )),
+                          Expanded(
+                            flex: 4,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 10),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "${Snapshot.data!.articles![index].title!.split(' ').take(3).join(' ') == null ? "Not availabe" : Snapshot.data!.articles![index].title!.split(' ').take(3).join(' ')}   ",
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  SizedBox(height: 5),
+                                  Text(
+                                    "${Snapshot.data!.articles![index].description!.split(' ').take(7).join(' ') == null ? "Not availabe" : Snapshot.data!.articles![index].description!.split(' ').take(7).join(' ')}",
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 14,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Icon(Icons
+                                              .supervised_user_circle_outlined),
+                                          Text(
+                                            " Natalie.6h",
+                                            style: TextStyle(
+                                                fontSize: 10,
+                                                color: Colors.grey),
+                                          )
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Icon(Icons.heart_broken),
+                                          Text(
+                                            "4k",
+                                            style: TextStyle(
+                                                fontSize: 10,
+                                                color: Colors.grey),
+                                          ),
+                                          SizedBox(
+                                            width: 5,
+                                          ),
+                                          Icon(Icons.message),
+                                          Text(
+                                            "3.5k",
+                                            style: TextStyle(
+                                                fontSize: 10,
+                                                color: Colors.grey),
+                                          )
+                                        ],
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
+                      );
+                    } else {
+                      return Container(
+                        child: Text("failed"),
+                      );
+                    }
+                  }));
+        },
+        itemCount: 5,
+      ),
+    );
   }
 }
